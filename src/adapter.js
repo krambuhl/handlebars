@@ -1,6 +1,7 @@
 'use strict';
 
 const _           = require('lodash');
+const Promise     = require('bluebird');
 const promisedHbs = require('promised-handlebars');
 const Handlebars  = require('handlebars');
 const Adapter     = require('@frctl/fractal').Adapter;
@@ -13,6 +14,10 @@ class HandlebarsAdapter extends Adapter {
         this.on('view:added',   view => this.engine.registerPartial(view.handle, view.content));
         this.on('view:removed', view => this.engine.unregisterPartial(view.handle));
         this.on('view:updated', view => this.engine.registerPartial(view.handle, view.content));
+    }
+
+    get handlebars() {
+        return this._engine;
     }
 
     render(path, str, context, meta) {
@@ -41,7 +46,9 @@ module.exports = function(config) {
 
         register(source, app) {
 
-            const hbs = promisedHbs(Handlebars);
+            const hbs = promisedHbs(Handlebars, {
+                Promise: Promise
+            });
 
             const invokePartial = hbs.VM.invokePartial;
             hbs.VM.invokePartial = function() {
