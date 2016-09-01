@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/frctl/handlebars",
   "dependencies": {
-    "@frctl/fractal": "^1.0.0",
+    "@frctl/fractal": "^1.1.0-alpha.0",
     "bluebird": "^3.4.1",
     "handlebars": "^4.0.5",
     "lodash": "^4.12.0",
