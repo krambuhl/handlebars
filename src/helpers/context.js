@@ -10,7 +10,7 @@ module.exports = function(fractal){
         if (!entity) {
             throw new Error(`Could not get context for component '${handle}' - component not found.`);
         }
-        const context = entity.isComponent ? entity.variants().default().getContext() : entity..getContext();
+        const context = entity.isComponent ? entity.variants().default().getContext() : entity.getContext();
         return new Handlebars.SafeString(JSON.stringify(context, null, 4));
     };
 
