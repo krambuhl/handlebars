@@ -23,7 +23,7 @@ module.exports = function(fractal){
         if (!entity) {
             throw new Error(`Could not render component '${handle}' - component not found.`);
         }
-        const defaultContext = entity.isComponent ? entity.variants().default().getContext() : entity..getContext();
+        const defaultContext = entity.isComponent ? entity.variants().default().getContext() : entity.getContext();
         if (!context) {
             context = defaultContext;
         } else if (merge) {
@@ -34,7 +34,7 @@ module.exports = function(fractal){
         let env = JSON.parse(JSON.stringify(root._env));
         _.set(context, '_env', env);
 
-        return entity.render(context).then(html => new Handlebars.SafeString(html));
+        return entity.render(context).then(html => new Handlebars.SafeString(html)).catch(err => {});
     };
 
 };
