@@ -1,5 +1,9 @@
 # History
 
+## 1.1.4
+
+* [NEW] Add support for referencing partials by path in addition to `@handle`
+
 ## 1.1.2
 
 * [FIX] Fix issue with incorrect paths being generated using the `path` helper when used within a component rendered using the `render` helper.
