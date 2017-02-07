@@ -1,5 +1,6 @@
 'use strict';
 
+const path        = require('path');
 const _           = require('lodash');
 const Promise     = require('bluebird');
 const promisedHbs = require('promised-handlebars');
@@ -12,8 +13,11 @@ class HandlebarsAdapter extends Adapter {
         super(hbs, source);
         this._app = app;
         this.on('view:added',   view => this.engine.registerPartial(view.handle, view.content));
+        this.on('view:added',   view => this.engine.registerPartial(path.relative(source.get('path'), view.path), view.content));
         this.on('view:removed', view => this.engine.unregisterPartial(view.handle));
+        this.on('view:removed', view => this.engine.unregisterPartial(path.relative(source.get('path'), view.path)));
         this.on('view:updated', view => this.engine.registerPartial(view.handle, view.content));
+        this.on('view:updated', view => this.engine.registerPartial(path.relative(source.get('path'), view.path), view.content));
     }
 
     get handlebars() {
@@ -53,7 +57,14 @@ module.exports = function(config) {
             const invokePartial = hbs.VM.invokePartial;
             hbs.VM.invokePartial = function() {
                 const args = Array.from(arguments);
-                const entity = app.components.find(args[2].name);
+                const identifier = args[2].name;
+                let entity;
+                if (identifier.indexOf('@') === 0) {
+                    entity = app.components.find(identifier);
+                } else {
+                    entity = app.components.find('viewPath', identifier);    
+                }
+
                 if (entity) {
                     args[2].data.root._self = entity.isComponent ? entity.variants().default().toJSON() : entity.toJSON();
                 } else {
