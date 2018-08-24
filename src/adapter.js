@@ -62,7 +62,11 @@ module.exports = function(config) {
                 if (identifier.indexOf('@') === 0) {
                     entity = app.components.find(identifier);
                 } else {
-                    entity = app.components.find('viewPath', identifier);    
+                    entity = app.components.find('viewPath', identifier);
+                }
+
+                if (args[2].data.root === undefined) {
+                    args[2].data.root = {};
                 }
 
                 if (entity) {
